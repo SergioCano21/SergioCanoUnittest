@@ -4,9 +4,10 @@ import java.sql.*;
 
 import com.mayab.quality.unittest.dao.DAOUser;
 import com.mayab.quality.unittest.model.User;
+import com.mayab.quality.unittest.service.UserService;
 public class App{
     public static void main(String args[]) throws SQLException {
-        Connection con = null;
+        /*Connection con = null;
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             String dbURL = "jdbc:mysql://localhost:3307/calidad2024";
@@ -24,11 +25,12 @@ public class App{
         }catch(Exception e){ System.out.println(e);}
         finally {
             con.close();
-        }
+        }*/
     	
     	
-    	//DAOUser dao = new DAOUser();
-    	//dao.save(new User("Sergio", "email@email.com", "123456"));
+    	DAOUser dao = new DAOUser();
+    	UserService service = new UserService(dao);
+    	service.createUser("Sergio", "email2@email.com", "123456789");
 
     }
 }

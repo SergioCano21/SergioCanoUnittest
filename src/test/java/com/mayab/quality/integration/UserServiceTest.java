@@ -1,16 +1,12 @@
 package com.mayab.quality.integration;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.FileInputStream;
-import java.sql.DriverManager;
 import java.io.File;
 
 import org.dbunit.Assertion;
 import org.dbunit.DBTestCase;
 import org.dbunit.PropertiesBasedJdbcDatabaseTester;
 import org.dbunit.database.DatabaseConfig;
-import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
@@ -27,10 +23,6 @@ class UserServiceTest extends DBTestCase{
 	
 	private DAOUser dao;
 	private UserService service;
-	private String driver = "com.mysql.cj.jdbc.Driver";
-	private String url = "jdbc:mysql://localhost:3307/calidad2024";
-	private String username = "root";
-	private String pass = "123456";
 
 	public UserServiceTest(){
 		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS, "com.mysql.cj.jdbc.Driver");
@@ -62,7 +54,7 @@ class UserServiceTest extends DBTestCase{
 	
 	@Test
 	public void create_user_happy_path() {
-		User usuario = new User("username2", "correo2@correo.com", "123456");
+		User usuario = new User("username2", "correo2@correo.com", "123456789");
 		
 		service.createUser(usuario.getName(), usuario.getEmail(), usuario.getPassword());
 		
@@ -74,6 +66,7 @@ class UserServiceTest extends DBTestCase{
 			
 			ITable actualTable = databaseDataSet.getTable("usuarios");
 			
+			// Read XML with the expected result
 			IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(new File("src/resources/create.xml"));
 			ITable expectedTable = expectedDataSet.getTable("usuarios");
 			
@@ -83,10 +76,10 @@ class UserServiceTest extends DBTestCase{
 			fail("Error in insert test: " + e.getMessage());
 		}	
 	}
-	
+
 	@Test
-	public void create_user_email_exists() {
-		User usuario = new User("username2", "correo2@correo.com", "123456");
+	public void create_user_when_email_exists() {
+		User usuario = new User("username2", "correo3@correo.com", "123456");
 		
 		//Se crea el primer usuario con el correo
 		service.createUser(usuario.getName(), usuario.getEmail(), usuario.getPassword());
@@ -116,7 +109,7 @@ class UserServiceTest extends DBTestCase{
 	
 	@Test
 	public void create_user_when_password_long() {
-		User usuario = new User("username2", "correo2@correo.com", "1234567890987654321");
+		User usuario = new User("username2", "correo@correo.com", "1234567890987654321");
 		
 		try {
 			IDatabaseConnection conn = getConnection();
@@ -142,7 +135,7 @@ class UserServiceTest extends DBTestCase{
 	
 	@Test
 	public void create_user_when_password_short() {
-		User usuario = new User("username2", "correo2@correo.com", "123");
+		User usuario = new User("username2", "correo@correo.com", "123");
 		
 		try {
 			IDatabaseConnection conn = getConnection();
@@ -168,7 +161,8 @@ class UserServiceTest extends DBTestCase{
 	
 	@Test
 	public void find_user_by_email() {
-		User usuario = new User("username2", "correo2@correo.com", "123");
+		
+		User user = service.findUserByEmail("correo3@correo.com");
 		
 		try {
 			IDatabaseConnection conn = getConnection();
@@ -176,12 +170,7 @@ class UserServiceTest extends DBTestCase{
 			IDataSet databaseDataSet = conn.createDataSet(); 
 			String[] tablas = databaseDataSet.getTableNames();
 			
-			ITable actualTableBefore = databaseDataSet.getTable("usuarios");
-			
-			User user = service.findUserByEmail("correo2@correo.com");
-			assertNull(null);
-			
-
+			IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(new File("src/resources/initDB.xml"));
 			
 		} catch (Exception e) {
 			fail("Error in insert test: " + e.getMessage());
