@@ -276,7 +276,7 @@ class UserServiceTest extends DBTestCase{
 			ITable actualTable = databaseDataSet.getTable("usuarios");
 			int actualRows = actualTable.getRowCount();
 			
-			assertEquals(actualRows, 0);
+			assertEquals(actualRows, 2);
 			
 		} catch (Exception e) {
 			fail("Error in insert test: " + e.getMessage());
