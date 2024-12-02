@@ -55,7 +55,7 @@ jobs:
 workflows:
   build-and-test:
     jobs:
-      - test-java
+      - build
     # - deploy:
     #     requires:
     #       - test-java
