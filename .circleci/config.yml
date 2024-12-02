@@ -28,27 +28,27 @@ jobs:
             mysql -h 127.0.0.1 -u root -p123456 -e "CREATE DATABASE IF NOT EXISTS calidad2024;"
             mysql -h 127.0.0.1 -u root -p123456 calidad2024 < src/resources/db.sql
       - run:
+          name: Download Selenium
+          command: curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
+      - run:
+          name: Start Selenium
+          command: java -jar selenium-server-standalone-3.5.3.jar -log test-reports/selenium.log
+          background: true
+  test:
+    steps:
+      - run:
           name: Unit Tests
           command: mvn -Dtest=com.mayab.quality.unittest.service.UserServiceTest test
       - run:
           name: Integration Tests
           command: mvn -Dtest=com.mayab.quality.integration.UserServiceTest test
-      #- run:
-       #   name: Functional Tests
-        #  command: mvn -Dtest=CRUDSeleniumTest test
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
-    docker:
-      - image: cimg/base:stable
-    steps:
-      # Replace this with steps to deploy to users
       - run:
-          name: deploy
-          command: '#e.g.'
+          name: Functional Tests
+          command: mvn -Dtest=CRUDSeleniumTest test
 workflows:
   build-and-test:
     jobs:
       - build
-    # - deploy:
+      - test
     #     requires:
     #       - test-java
