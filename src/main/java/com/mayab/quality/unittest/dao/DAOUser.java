@@ -19,7 +19,7 @@ public class DAOUser implements IDAOUser {
 			// Establish the driver connector
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			// Set the URI for connecting the MySql database
-			String dbURL = "jdbc:mysql://localhost:3307/calidad2024";
+			String dbURL = "jdbc:mysql://localhost:3306/calidad2024";
 			String strUserID = "root";
             String strPassword = "123456";
             con = DriverManager.getConnection(dbURL,strUserID,strPassword);
