@@ -36,6 +36,15 @@ jobs:
           command: |
             java -jar selenium-server-4.7.0.jar -log test-reports/selenium.log &
             sleep 10
+      - run:
+          name: Unit Tests
+          command: mvn -Dtest=com.mayab.quality.unittest.service.UserServiceTest test
+      - run:
+          name: Integration Tests
+          command: mvn -Dtest=com.mayab.quality.integration.UserServiceTest test
+      - run:
+          name: Functional Tests
+          command: mvn -Dtest=com.mayab.quality.functional.CRUDSeleniumTest test
 
   test:
     docker:
@@ -57,6 +66,6 @@ workflows:
   build-and-test:
     jobs:
       - build
-      - test:
+      #- test:
           requires:
             - build
