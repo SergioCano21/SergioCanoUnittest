@@ -3,10 +3,10 @@ jobs:
   build:
     docker:
       - image: cimg/openjdk:17.0
-      #- image: cimg/mysql:8.0
-       # environment:
-        #  MYSQL_ROOT_PASSWORD: 123456
-         # MYSQL_DATABASE: calidad2024
+      - image: cimg/mysql:8.0
+        environment:
+          MYSQL_ROOT_PASSWORD: 123456
+          MYSQL_DATABASE: calidad2024
     steps:
       - checkout
       - run:
