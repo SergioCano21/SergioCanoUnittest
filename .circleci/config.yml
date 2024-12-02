@@ -43,21 +43,19 @@ jobs:
       - run:
           name: Functional Tests
           command: mvn -Dtest=CRUDSeleniumTest test
-  test:
+  deploy:
+    # This is an example deploy job, not actually used by the workflow
+    docker:
+      - image: cimg/base:stable
     steps:
+      # Replace this with steps to deploy to users
       - run:
-          name: Unit Tests
-          command: mvn -Dtest=com.mayab.quality.unittest.service.UserServiceTest test
-      - run:
-          name: Integration Tests
-          command: mvn -Dtest=com.mayab.quality.integration.UserServiceTest test
-      - run:
-          name: Functional Tests
-          command: mvn -Dtest=CRUDSeleniumTest test
+          name: deploy
+          command: '#e.g.'
 workflows:
   build-and-test:
     jobs:
-      - build
-      #- test
+      - test-java
+    # - deploy:
     #     requires:
     #       - test-java
