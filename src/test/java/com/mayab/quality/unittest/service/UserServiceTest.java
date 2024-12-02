@@ -97,7 +97,20 @@ class UserServiceTest {
 		User user = new User("user", "email", "password");
 		user.setId(1);
 		
-		when(dao.deleteById(anyInt())).thenReturn(true);
+		db.put(user.getId(), user);		
+		
+		when(dao.deleteById(anyInt())).thenAnswer(new Answer<Boolean>() {
+			public Boolean answer(InvocationOnMock invocation) {
+				int arg = (int) invocation.getArguments()[0];
+
+				User u = db.remove(arg);
+				if(u == user) {
+					return true;
+				}
+				return false;
+			}
+		});
+		
 		boolean result = service.deleteUser(user.getId());
 		
 		assertThat(result, is(true));

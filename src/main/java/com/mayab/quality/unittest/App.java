@@ -30,7 +30,12 @@ public class App{
     	
     	DAOUser dao = new DAOUser();
     	UserService service = new UserService(dao);
-    	service.createUser("Sergio", "email2@email.com", "123456789");
-
+    	User user = new User("Nuevo nombre", "correo3@correo.com", "09876543212");
+		user.setId(1);
+		User newUser = service.updateUser(user);
+		System.out.println(newUser.getId());
+		System.out.println(newUser.getName());
+		System.out.println(newUser.getEmail());
+		System.out.println(newUser.getPassword());
     }
 }

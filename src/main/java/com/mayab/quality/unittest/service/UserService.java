@@ -54,7 +54,7 @@ public class UserService {
 
     
 
-    boolean deleteUser(int id) {
+    public boolean deleteUser(int id) {
     	return dao.deleteById(id);
     }
 }

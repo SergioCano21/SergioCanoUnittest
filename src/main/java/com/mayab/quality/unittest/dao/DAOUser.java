@@ -141,11 +141,11 @@ public class DAOUser implements IDAOUser {
 
 			int id = rs.getInt(1);
 			String username  = rs.getString(2);
-			String email = rs.getString(3);
-			String password = rs.getString(4);
+			String password = rs.getString(3);
+			String email = rs.getString(4);
 			boolean isLogged = rs.getBoolean(5);
 
-			result = new User(username, password, email);
+			result = new User(username, email, password);
 			result.setId(id);
 			result.setLogged(isLogged);
 
@@ -188,11 +188,11 @@ public class DAOUser implements IDAOUser {
 
 			int id = rs.getInt(1);
 			String username  = rs.getString(2);
-			String emailUser = rs.getString(3);
-			String password = rs.getString(4);
+			String password = rs.getString(3);
+			String emailUser = rs.getString(4);
 			boolean isLogged = rs.getBoolean(5);
 
-			result = new User(username, password, emailUser);
+			result = new User(username, emailUser, password);
 			result.setId(id);
 			result.setLogged(isLogged);
 
@@ -220,7 +220,6 @@ public class DAOUser implements IDAOUser {
 		Connection connection = getConnectionMySQL();
 		PreparedStatement preparedStatement;
 		ResultSet rs;
-		boolean result = false;
 	
 		User retrieved = null;
 		
@@ -234,10 +233,10 @@ public class DAOUser implements IDAOUser {
 
 				int id = rs.getInt(1);
 				String name = rs.getString(2);
-				String email = rs.getString(3);
-				String password = rs.getString(4);
+				String password = rs.getString(3);
+				String email = rs.getString(4);
 				boolean log = rs.getBoolean(5);		 
-				retrieved = new User(name, email,password);
+				retrieved = new User(name, email, password);
 				retrieved.setId(id);
 				retrieved.setLogged(log);
 				listaAlumnos.add(retrieved);
@@ -273,12 +272,12 @@ public class DAOUser implements IDAOUser {
 
 			int idUser = rs.getInt(1);
 			String username  = rs.getString(2);
-			String email = rs.getString(3);
-			String password = rs.getString(4);
+			String password = rs.getString(3);
+			String email = rs.getString(4);
 			boolean isLogged = rs.getBoolean(5);
 
-			result = new User(username, password, email);
-			result.setId(id);
+			result = new User(username, email, password);
+			result.setId(idUser);
 			result.setLogged(isLogged);
 
 			// Return the values of the search
