@@ -1,4 +1,5 @@
 version: 2.1
+
 jobs:
   build:
     docker:
@@ -29,11 +30,18 @@ jobs:
             mysql -h 127.0.0.1 -u root -p123456 calidad2024 < src/resources/db.sql
       - run:
           name: Download Selenium
-          command: curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
+          command: curl -O https://selenium-release.storage.googleapis.com/4.7/selenium-server-4.7.0.jar
       - run:
           name: Start Selenium
-          command: java -jar selenium-server-standalone-3.5.3.jar -log test-reports/selenium.log
-          background: true
+          command: |
+            java -jar selenium-server-4.7.0.jar -log test-reports/selenium.log &
+            sleep 10
+
+  test:
+    docker:
+      - image: cimg/openjdk:17.0-browsers
+    steps:
+      - checkout
       - run:
           name: Unit Tests
           command: mvn -Dtest=com.mayab.quality.unittest.service.UserServiceTest test
@@ -42,20 +50,13 @@ jobs:
           command: mvn -Dtest=com.mayab.quality.integration.UserServiceTest test
       - run:
           name: Functional Tests
-          command: mvn -Dtest=CRUDSeleniumTest test
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
-    docker:
-      - image: cimg/base:stable
-    steps:
-      # Replace this with steps to deploy to users
-      - run:
-          name: deploy
-          command: '#e.g.'
+          command: mvn -Dtest=com.mayab.quality.functional.CRUDSeleniumTest test
+
 workflows:
+  version: 2
   build-and-test:
     jobs:
       - build
-    # - deploy:
-    #     requires:
-    #       - test-java
+      - test:
+          requires:
+            - build
