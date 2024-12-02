@@ -20,9 +20,11 @@ jobs:
             done
             echo Failed waiting for MySQL && exit 1
       - run:
+          name: Verify MySQL Client
+          command: which mysql || echo "MySQL client not found"
+      - run:
           name: Create Database
           command: |
-            sudo apt search mysql
             mysql -h 127.0.0.1 -u root -p123456 -e "CREATE DATABASE IF NOT EXISTS calidad2024;"
             mysql -h 127.0.0.1 -u root -p123456 calidad2024 < src/resources/db.sql
       - run:
