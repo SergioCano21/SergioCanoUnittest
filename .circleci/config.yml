@@ -29,14 +29,6 @@ jobs:
             mysql -h 127.0.0.1 -u root -p123456 -e "CREATE DATABASE IF NOT EXISTS calidad2024;"
             mysql -h 127.0.0.1 -u root -p123456 calidad2024 < src/resources/db.sql
       - run:
-          name: Download Selenium
-          command: curl -O https://selenium-release.storage.googleapis.com/4.7/selenium-server-4.7.0.jar
-      - run:
-          name: Start Selenium
-          command: |
-            java -jar selenium-server-4.7.0.jar -log test-reports/selenium.log &
-            sleep 10
-      - run:
           name: Unit Tests
           command: mvn -Dtest=com.mayab.quality.unittest.service.UserServiceTest test
       - run:
