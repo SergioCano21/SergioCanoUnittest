@@ -56,7 +56,7 @@ public class FacebookTest {
         pause(3000);
 
         String result = driver.findElement(By.xpath("/html/body/div[1]/div[1]/div[1]/div/div[2]/div[2]/form/div/div[1]/div[2]")).getText();
-        assertEquals(result, is("El correo electrónico o número de celular que ingresaste no está conectado a una cuenta. Encuentra tu cuenta e inicia sesión."));
+        assertEquals(result, "El correo electrónico o número de celular que ingresaste no está conectado a una cuenta. Encuentra tu cuenta e inicia sesión.");
         pause(3000);
 
     }
