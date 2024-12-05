@@ -39,7 +39,7 @@ jobs:
       - run:
           name: Verify Chrome Installation
           command: google-chrome --version
-      
+
       - run:
           name: Run Unit Tests
           command: mvn -Dtest=com.mayab.quality.unittest.service.UserServiceTest test
@@ -47,7 +47,7 @@ jobs:
       - run:
           name: Run Integration Tests
           command: mvn -Dtest=com.mayab.quality.integration.UserServiceTest test
-      
+
       - run:
           name: Run Functional Tests
           command: mvn -Dtest=com.mayab.quality.functional.CRUDSeleniumTest test
@@ -56,10 +56,22 @@ jobs:
           path: target/surefire-reports
       - save_cache:
           key: cache-{{ checksum "/tmp/CIRCLECI_CACHE_KEY" }}
-          paths:
-              ~/.m2/repository
+          paths: ~/.m2/repository
+  
+  deployment:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - run:
+          name: Deployment Steps
+          command: echo "El Deployment se ejecutó con exito"
 
 workflows:
-  build-and-tests:
+  build-and-deployment:
     jobs:
       - build
+      - deployment:
+          filters:
+            branches:
+              only:
+                - main
