@@ -32,7 +32,6 @@ public class CRUDSeleniumTest {
 	private String baseUrl;
 	private StringBuffer verificationErrors = new StringBuffer();
 	JavascriptExecutor js;
-	ChromeOptions options;
   
 	private void pause(long milis) {
 		try {
@@ -44,18 +43,18 @@ public class CRUDSeleniumTest {
 	}
   
 	@BeforeEach
-	public void setUp() throws Exception {
+	public void setUp() throws Exception {		
 		WebDriverManager.chromedriver().setup();
-		options = new ChromeOptions();
-		options.addArguments("--headless");
-		options.addArguments("--disable-gpu");
-        options.addArguments("--window-size=1400,800");
-		options.addArguments("--no-sandbox");
-		options.addArguments("--ignore-certificate-errors");
-		driver = new ChromeDriver(options);
-		baseUrl = "https://mern-crud-mpfr.onrender.com/";
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
-		js = (JavascriptExecutor) driver;
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--window-size=1920,1080");
+        driver = new ChromeDriver(options);
+        baseUrl = "https://www.google.com/";
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+        js = (JavascriptExecutor) driver;
 	}
 	
 	public void takeScreenshot(String fileName) throws IOException {
@@ -66,7 +65,8 @@ public class CRUDSeleniumTest {
 	@Test
 	@Order(1)
 	public void Add_User_Correct() throws Exception {
-		driver.get(baseUrl);
+		driver.get(baseUrl + "chrome://newtab/");
+        driver.get("https://mern-crud-mpfr.onrender.com");
 		driver.findElement(By.xpath("//div[@id='root']/div/div[2]/button")).click();
 	    driver.findElement(By.name("name")).click();
 	    driver.findElement(By.name("name")).clear();
@@ -90,7 +90,8 @@ public class CRUDSeleniumTest {
 	@Test
 	@Order(2)
 	public void Add_User__Not_Correct() throws Exception {
-		driver.get(baseUrl);
+		driver.get(baseUrl + "chrome://newtab/");
+        driver.get("https://mern-crud-mpfr.onrender.com");
 		driver.findElement(By.xpath("//div[@id='root']/div/div[2]/button")).click();
 	    driver.findElement(By.name("name")).click();
 	    driver.findElement(By.name("name")).clear();
@@ -114,7 +115,8 @@ public class CRUDSeleniumTest {
 	@Test
 	@Order(3)
 	public void Update_User_Age() throws Exception {
-		driver.get(baseUrl);
+		driver.get(baseUrl + "chrome://newtab/");
+        driver.get("https://mern-crud-mpfr.onrender.com");
 	    driver.findElement(By.xpath("//div[@id='root']/div/div[2]/table/tbody/tr/td[5]/button")).click();
 	    pause(1000);
 	    driver.findElement(By.name("age")).click();
@@ -131,7 +133,8 @@ public class CRUDSeleniumTest {
 	@Test
 	@Order(6)
 	public void Delete_User() throws Exception {
-		driver.get(baseUrl);
+		driver.get(baseUrl + "chrome://newtab/");
+        driver.get("https://mern-crud-mpfr.onrender.com");
 		driver.findElement(By.xpath("//div[@id='root']/div/div[2]/table/tbody/tr/td[5]/button[2]")).click();
 		pause(1000);
 		takeScreenshot("Delete_User");
@@ -141,7 +144,8 @@ public class CRUDSeleniumTest {
 	@Test
 	@Order(4)
 	public void Find_User_By_Name() {
-		driver.get(baseUrl);
+		driver.get(baseUrl + "chrome://newtab/");
+        driver.get("https://mern-crud-mpfr.onrender.com");
 		WebElement tbody = driver.findElement(By.xpath("/html/body/div[2]/div/div[2]/table/tbody"));
 		List<WebElement> rows = tbody.findElements(By.tagName("tr"));
 		List<List<String>> tableData = new ArrayList<>();
@@ -173,7 +177,8 @@ public class CRUDSeleniumTest {
 	@Test
 	@Order(5)
 	public void Find_All_Users() {
-		driver.get(baseUrl);
+		driver.get(baseUrl + "chrome://newtab/");
+        driver.get("https://mern-crud-mpfr.onrender.com");
 		WebElement tbody = driver.findElement(By.xpath("/html/body/div[2]/div/div[2]/table/tbody"));
 		List<WebElement> rows = tbody.findElements(By.tagName("tr"));
 		List<List<String>> tableData = new ArrayList<>();
