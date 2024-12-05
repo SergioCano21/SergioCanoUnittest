@@ -28,29 +28,49 @@ jobs:
           command: |
             mysql -h 127.0.0.1 -u root -p123456 -e "CREATE DATABASE IF NOT EXISTS calidad2024;"
             mysql -h 127.0.0.1 -u root -p123456 calidad2024 < src/resources/db.sql
-      - run:
-          name: Unit Tests
-          command: mvn -Dtest=com.mayab.quality.unittest.service.UserServiceTest test
-      - run:
-          name: Integration Tests
-          command: mvn -Dtest=com.mayab.quality.integration.UserServiceTest test
-      - run:
-          name: Functional Tests
-          command: mvn -Dtest=com.mayab.quality.functional.CRUDSeleniumTest test
 
-  test:
+  unit_test:
     docker:
       - image: cimg/openjdk:17.0-browsers
     steps:
       - checkout
       - run:
-          name: Unit Tests
+          name: Unit Tests - Mockito
           command: mvn -Dtest=com.mayab.quality.unittest.service.UserServiceTest test
+
+  integration_test:
+    docker:
+      - image: cimg/openjdk:17.0-browsers
+      - image: cimg/mysql:8.0
+        environment:
+          MYSQL_ROOT_PASSWORD: 123456
+          MYSQL_DATABASE: calidad2024
+    steps:
+      - checkout
       - run:
-          name: Integration Tests
+          name: Install MySQL Client
+          command: sudo apt-get update && sudo apt-get install -y default-mysql-client
+      - run:
+          name: Waiting for MySQL to be ready
+          command: |
+            for i in `seq 1 10`;
+            do
+              nc -z 127.0.0.1 3306 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for MySQL && exit 1
+      - run:
+          name: Integration Tests - DBUnit
           command: mvn -Dtest=com.mayab.quality.integration.UserServiceTest test
+
+  functional_test:
+    docker:
+      - image: cimg/openjdk:17.0-browsers
+    steps:
+      - checkout
       - run:
-          name: Functional Tests
+          name: Functional Tests - Selenium
           command: mvn -Dtest=com.mayab.quality.functional.CRUDSeleniumTest test
 
 workflows:
@@ -58,6 +78,12 @@ workflows:
   build-and-test:
     jobs:
       - build
-      #- test:
-          #requires:
-           # - build
+      - unit_test:
+          requires:
+            - build
+      - integration_test:
+          requires:
+            - build
+      - functional_test:
+          requires:
+            - build
