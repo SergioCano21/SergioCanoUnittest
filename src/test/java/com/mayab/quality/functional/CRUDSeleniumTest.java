@@ -136,7 +136,7 @@ public class CRUDSeleniumTest {
 		driver.findElement(By.xpath("//div[@id='root']/div/div[2]/table/tbody/tr/td[5]/button[2]")).click();
 		pause(1000);
 		takeScreenshot("Delete_User");
-	    driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Sergio Cano'])[2]/following::button[1]")).click();
+	    driver.findElement(By.xpath("/html/body/div[3]/div/div[3]/button[1]")).click();
 	}
 	
 	@Test
