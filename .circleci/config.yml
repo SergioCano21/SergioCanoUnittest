@@ -10,13 +10,19 @@ jobs:
           MYSQL_DATABASE: calidad2024
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            # Primero intenta coincidir exactamente con el último caché generado
+            - maven-deps-{{ checksum "pom.xml" }}
+            # Si no hay coincidencia, usa el caché más reciente sin considerar los cambios en el pom.xml
+            - maven-deps-
       - run:
           name: Install MySQL Client
           command: sudo apt-get update && sudo apt-get install -y default-mysql-client
       - run:
           name: Waiting for MySQL to be ready
           command: |
-            for i in `seq 1 10`;
+            for i in `seq 1 10` ;
             do
               nc -z 127.0.0.1 3306 && echo Success && exit 0
               echo -n .
@@ -29,18 +35,31 @@ jobs:
             mysql -h 127.0.0.1 -u root -p123456 -e "CREATE DATABASE IF NOT EXISTS calidad2024;"
             mysql -h 127.0.0.1 -u root -p123456 calidad2024 < src/resources/db.sql
       - run:
-          name: Verificar instalación de Chrome
+          name: Verify Chrome Installation
           command: google-chrome --version
+      
+      - save_cache:
+          key: maven-deps-{{ checksum "pom.xml" }}
+          paths:
+            - ~/.m2/repository # Directorio con dependencias de Maven
 
   unit_test:
     docker:
       - image: cimg/openjdk:17.0-browsers
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - maven-deps-{{ checksum "pom.xml" }}
+            - maven-deps-
       - run:
-          name: Unit Tests
+          name: Run Unit Tests
           command: mvn -Dtest=com.mayab.quality.unittest.service.UserServiceTest test
-  
+      - save_cache:
+          key: maven-deps-{{ checksum "pom.xml" }}
+          paths:
+            - ~/.m2/repository
+
   integration_test:
     docker:
       - image: cimg/openjdk:17.0-browsers
@@ -50,20 +69,34 @@ jobs:
           MYSQL_DATABASE: calidad2024
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - maven-deps-{{ checksum "pom.xml" }}
+            - maven-deps-
       - run:
-          name: Integration Test - dbunit
-          command: mvn -Dtest=com.mayab.quality.functional.CRUDSeleniumTest test
-    
+          name: Run Integration Tests
+          command: mvn -Dtest=com.mayab.quality.integration.UserServiceTest test
+      - save_cache:
+          key: maven-deps-{{ checksum "pom.xml" }}
+          paths:
+            - ~/.m2/repository
+
   functional_test:
     docker:
       - image: cimg/openjdk:17.0-browsers
-
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - maven-deps-{{ checksum "pom.xml" }}
+            - maven-deps-
       - run:
-          name: Functional Test - selenium
+          name: Run Functional Tests
           command: mvn -Dtest=com.mayab.quality.functional.CRUDSeleniumTest test
-     
+      - save_cache:
+          key: maven-deps-{{ checksum "pom.xml" }}
+          paths:
+            - ~/.m2/repository
 
 workflows:
   build-and-tests:
