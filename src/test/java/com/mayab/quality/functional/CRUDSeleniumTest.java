@@ -81,7 +81,7 @@ public class CRUDSeleniumTest {
 	    pause(1000);
 	    takeScreenshot("Add_User_Correct");
 	    String result = driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/form/div[4]/div/p")).getText();
-	    assertEquals(result, "Successfully added!");
+	    assertEquals(result, "Successfully added!error");
 	    driver.findElement(By.xpath("//i")).click();	
 	}
 	
