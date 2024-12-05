@@ -50,6 +50,8 @@ public class CRUDSeleniumTest {
 		options.addArguments("--headless");
 		options.addArguments("--disable-gpu");
         options.addArguments("--window-size=1400,800");
+		options.addArguments("--no-sandbox");
+		options.addArguments("--ignore-certificate-errors");
 		driver = new ChromeDriver(options);
 		baseUrl = "https://mern-crud-mpfr.onrender.com/";
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
