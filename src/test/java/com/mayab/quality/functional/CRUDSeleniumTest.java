@@ -106,7 +106,7 @@ public class CRUDSeleniumTest {
 	    pause(1000);
 	    takeScreenshot("Add_User__Not_Correct");
 	    String result = driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/form/div[5]/div/p")).getText();
-	    assertEquals(result, "That email is already taken.");
+	    assertEquals(result, "That email is already taken.2");
 	    driver.findElement(By.xpath("//i")).click();
 	}
 
