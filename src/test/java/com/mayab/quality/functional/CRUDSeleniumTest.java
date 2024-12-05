@@ -1,17 +1,17 @@
 package com.mayab.quality.functional;
 
-import static org.junit.jupiter.api.Assertions.*;
+//import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.fail;
 
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
 import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestMethodOrder;
+//import org.junit.jupiter.api.AfterEach;
+//import org.junit.jupiter.api.BeforeEach;
+//import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+//import org.junit.jupiter.api.Order;
+//import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -25,7 +25,10 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-@TestMethodOrder(OrderAnnotation.class)
+import org.junit.*;
+import org.junit.runners.MethodSorters;
+
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CRUDSeleniumTest {
 
 	private static WebDriver driver;
@@ -42,7 +45,7 @@ public class CRUDSeleniumTest {
 		}
 	}
   
-	@BeforeEach
+	@Before
 	public void setUp() throws Exception {		
 		WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
@@ -63,8 +66,7 @@ public class CRUDSeleniumTest {
     }
   
 	@Test
-	@Order(1)
-	public void Add_User_Correct() throws Exception {
+	public void test1_Add_User_Correct() throws Exception {
 		driver.get(baseUrl + "chrome://newtab/");
         driver.get("https://mern-crud-mpfr.onrender.com");
 		driver.findElement(By.xpath("//div[@id='root']/div/div[2]/button")).click();
@@ -88,8 +90,7 @@ public class CRUDSeleniumTest {
 	}
 	
 	@Test
-	@Order(2)
-	public void Add_User__Not_Correct() throws Exception {
+	public void test2_Add_User__Not_Correct() throws Exception {
 		driver.get(baseUrl + "chrome://newtab/");
         driver.get("https://mern-crud-mpfr.onrender.com");
 		driver.findElement(By.xpath("//div[@id='root']/div/div[2]/button")).click();
@@ -113,8 +114,7 @@ public class CRUDSeleniumTest {
 	}
 
 	@Test
-	@Order(3)
-	public void Update_User_Age() throws Exception {
+	public void test3_Update_User_Age() throws Exception {
 		driver.get(baseUrl + "chrome://newtab/");
         driver.get("https://mern-crud-mpfr.onrender.com");
 	    driver.findElement(By.xpath("//div[@id='root']/div/div[2]/table/tbody/tr/td[5]/button")).click();
@@ -131,8 +131,7 @@ public class CRUDSeleniumTest {
 	}
 	
 	@Test
-	@Order(6)
-	public void Delete_User() throws Exception {
+	public void test6_Delete_User() throws Exception {
 		driver.get(baseUrl + "chrome://newtab/");
         driver.get("https://mern-crud-mpfr.onrender.com");
 		driver.findElement(By.xpath("//div[@id='root']/div/div[2]/table/tbody/tr/td[5]/button[2]")).click();
@@ -142,8 +141,7 @@ public class CRUDSeleniumTest {
 	}
 	
 	@Test
-	@Order(4)
-	public void Find_User_By_Name() {
+	public void test4_Find_User_By_Name() {
 		driver.get(baseUrl + "chrome://newtab/");
         driver.get("https://mern-crud-mpfr.onrender.com");
 		WebElement tbody = driver.findElement(By.xpath("/html/body/div[2]/div/div[2]/table/tbody"));
@@ -175,8 +173,7 @@ public class CRUDSeleniumTest {
 	}
 	
 	@Test
-	@Order(5)
-	public void Find_All_Users() {
+	public void test5_Find_All_Users() {
 		driver.get(baseUrl + "chrome://newtab/");
         driver.get("https://mern-crud-mpfr.onrender.com");
 		WebElement tbody = driver.findElement(By.xpath("/html/body/div[2]/div/div[2]/table/tbody"));
@@ -196,7 +193,7 @@ public class CRUDSeleniumTest {
         System.out.println("------------------------");
 	}
 
-	@AfterEach
+	@After
 	public void tearDown() throws Exception {
 		driver.quit();
 		String verificationErrorString = verificationErrors.toString();
