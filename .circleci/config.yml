@@ -60,27 +60,22 @@ jobs:
           MYSQL_DATABASE: calidad2024
     steps:
       - checkout
-      - run:
-          name: Install MySQL Client
-          command: sudo apt-get update && sudo apt-get install -y default-mysql-client
-      - run:
-          name: Waiting for MySQL to be ready
-          command: |
-            for i in `seq 1 10`;
-            do
-              nc -z 127.0.0.1 3306 && echo Success && exit 0
-              echo -n .
-              sleep 1
-            done
-            echo Failed waiting for MySQL && exit 1
-      - run:
-          name: Create Database
-          command: |
-            mysql -h 127.0.0.1 -u root -p123456 -e "CREATE DATABASE IF NOT EXISTS calidad2024;"
-            mysql -h 127.0.0.1 -u root -p123456 calidad2024 < src/resources/db.sql
+      docker:
+      - image: cimg/openjdk:17.0-browsers
+
       - run:
           name: Integration Test - dbunit
-          command: mvn -Dtest=com.mayab.quality.integration.UserServiceTest test
+          command: mvn -Dtest=com.mayab.quality.functional.CRUDSeleniumTest test
+    
+  functional_test:
+    docker:
+      - image: cimg/openjdk:17.0-browsers
+
+    steps:
+      - checkout
+      - run:
+          name: Functional Test - selenium
+          command: mvn -Dtest=com.mayab.quality.functional.CRUDSeleniumTest test
      
 
 workflows:
@@ -88,7 +83,12 @@ workflows:
   build-and-tests:
     jobs:
       - build
-      - unit_test
-      - integration_test
-          #requires:
-           # - build
+      - unit_test:
+          requires:
+            - build
+      - integration_test:
+          requires:
+            - build
+      - functional_test:
+          requires:
+            - build
