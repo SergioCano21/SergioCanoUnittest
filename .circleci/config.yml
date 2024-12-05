@@ -32,16 +32,6 @@ jobs:
           name: Verificar instalación de Chrome
           command: google-chrome --version
 
-      #- run:
-       #   name: Unit Test - mockito
-        #  command: mvn -Dtest=com.mayab.quality.unittest.service.UserServiceTest test
-      #- run:
-       #   name: Integration Test - dbunit
-        #  command: mvn -Dtest=com.mayab.quality.integration.UserServiceTest test
-      #- run:
-       #   name: Functional Test - selenium
-        #  command: mvn -Dtest=com.mayab.quality.functional.CRUDSeleniumTest test
-
   unit_test:
     docker:
       - image: cimg/openjdk:17.0-browsers
@@ -60,9 +50,6 @@ jobs:
           MYSQL_DATABASE: calidad2024
     steps:
       - checkout
-      docker:
-      - image: cimg/openjdk:17.0-browsers
-
       - run:
           name: Integration Test - dbunit
           command: mvn -Dtest=com.mayab.quality.functional.CRUDSeleniumTest test
@@ -79,7 +66,6 @@ jobs:
      
 
 workflows:
-  version: 2
   build-and-tests:
     jobs:
       - build
